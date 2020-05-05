@@ -10,25 +10,25 @@ def extract_value(pic):
     # print(f"HLS: {colorsys.rgb_to_hls(pval[0]/255, pval[1]/255, pval[2]/255)}")
     # print(f"HSV: {colorsys.rgb_to_hsv(pval[0]/255, pval[1]/255, pval[2]/255)}")
     # print(f"H: {int(colorsys.rgb_to_hsv(pval[0]/255, pval[1]/255, pval[2]/255)[0]*360)}")
-    hue = int(colorsys.rgb_to_hsv(pval[0] / 255, pval[1] / 255, pval[2] / 255)[0] * 360)
+    hsv = colorsys.rgb_to_hsv(pval[0] / 255, pval[1] / 255, pval[2] / 255)
+    if hsv[1] <= 10 and hsv[2] >= 80:
+        hue = "white"
+    elif hsv[2] <= 30:
+        hue = "black"
+    else:
+        hue = int(hsv[0] * 360)
     return hue
 
 def define_color(hue):
-    if hue <= 20 or hue > 335 and hue <= 360:
-        return 1 #"red" 
-    elif hue > 20 and hue <= 35:
-        return 2 #"orange"
-    elif hue > 35 and hue <= 70:
-        return 3 #"yellow"
-    elif hue > 70 and hue <= 170:
+    if (hue <= 30 and hue >= 0) or (hue > 335 and hue <= 360):
+        return 3 #"red" 
+    elif hue > 30 and hue <= 65:
+        return 5 #"yellow"
+    elif hue > 65 and hue <= 165:
         return 4 #"green"
-    elif hue > 170 and hue <= 190:
-        return 5 #"light blue"
-    elif hue > 190 and hue <= 265:
-        return 6 #"blue"
-    elif hue > 265 and hue <= 285:
-        return 7 #"purple"
-    elif hue > 285 and hue <= 335:
-        return 8 #"pink"
+    elif hue > 165 and hue <= 275:
+        return 1 #"blue"
+    elif hue == "white":
+        return 2
     else:
         return 0

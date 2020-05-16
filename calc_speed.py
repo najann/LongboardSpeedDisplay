@@ -4,11 +4,9 @@ def calculate_speed(old, new):
     else:
         diff = new + (5 - old)
     speed = 4 * diff * 0.00001 * 360000
-    # ["blue", "white", "red", "green", "yellow"]
     if speed == 72:
         return 8
     elif speed == 57.6:
         return 7
     else:
         return int(speed // 7)
-    

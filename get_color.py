@@ -3,15 +3,16 @@ from PIL import Image
 
 
 def extract_value(pic):
-    with Image.open(pic) as im:
-        px = im.load()
-    pval = px[360, 240]
-    # print(pval[0], pval[1], pval[2])
+    if isinstance(pic, str):
+        with Image.open(pic) as im:
+            px = im.load()
+        pval = px[360, 240]
+    else:
+        pval = pic    # print(pval[0], pval[1], pval[2])
     # print(f"HLS: {colorsys.rgb_to_hls(pval[0]/255, pval[1]/255, pval[2]/255)}")
     # print(f"HSV: {colorsys.rgb_to_hsv(pval[0]/255, pval[1]/255, pval[2]/255)}")
     # print(f"H: {int(colorsys.rgb_to_hsv(pval[0]/255, pval[1]/255, pval[2]/255)[0]*360)}")
     hsv = colorsys.rgb_to_hsv(pval[0] / 255, pval[1] / 255, pval[2] / 255)
-    print(hsv)
     if hsv[1] <= 0.1 and hsv[2] >= 0.8:
         hue = "white"
     elif hsv[2] <= 0.3:
@@ -31,9 +32,9 @@ def define_color(hue):
             return 3 #"red" 
         elif hue > 30 and hue <= 65:
             return 5 #"yellow"
-        elif hue > 65 and hue <= 165:
+        elif hue > 65 and hue <= 180:
             return 4 #"green"
-        elif hue > 165 and hue <= 275:
+        elif hue > 180 and hue <= 275:
             return 1 #"blue
         else:
             return 0

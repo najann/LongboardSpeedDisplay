@@ -11,9 +11,14 @@ def initialize():
     device = max7219(serial)
     return device
 
+
 def light_up(count):
     img = Image.new('1', (8, 8))
-    for row in range(count):
+    full_rows = count//8
+    for row in range(full_rows):
         for col in range(8):
             img.putpixel((col, row), 1)
+    remainder = int(count % 8)
+    for point in range(remainder):
+        img.putpixel((point, full_rows), 1)
     return img

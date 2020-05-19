@@ -21,20 +21,21 @@ def extract_value(pic):
         hue = int(hsv[0] * 360)
     return hue
 
+
 def define_color(hue):
     if type(hue) == str:
         if hue == "white":
             return 2
-        else: #black
-            return 2 #TODO
+        else:  # black
+            return 6  # TODO
     else:
-        if (hue <= 30 and hue >= 0) or (hue > 335 and hue <= 360):
-            return 3 #"red" 
-        elif hue > 30 and hue <= 65:
-            return 5 #"yellow"
-        elif hue > 65 and hue <= 180:
-            return 4 #"green"
-        elif hue > 180 and hue <= 275:
-            return 1 #"blue
+        if (hue <= 35 and hue >= 0) or (hue > 330 and hue <= 360):
+            return 3  # "red"
+        elif hue > 35 and hue <= 65:
+            return 5  # "yellow"
+        elif hue > 65 and hue <= 175:
+            return 4  # "green"
+        elif hue > 175 and hue <= 265:
+            return 1  # blue
         else:
             return 0

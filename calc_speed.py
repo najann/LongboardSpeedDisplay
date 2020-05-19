@@ -9,4 +9,4 @@ def calculate_speed(old, new):
     elif speed == 57.6:
         return 7
     else:
-        return int(speed // 7)
+        return speed // 7

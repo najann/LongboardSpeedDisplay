@@ -6,7 +6,8 @@ def extract_value(pic):
     if isinstance(pic, str):
         with Image.open(pic) as im:
             px = im.load()
-        pval = px[360, 240]
+            size = px.size
+        pval = px[size[0] / 2, size[1] / 2]
     else:
         pval = pic    # print(pval[0], pval[1], pval[2])
     # print(f"HLS: {colorsys.rgb_to_hls(pval[0]/255, pval[1]/255, pval[2]/255)}")

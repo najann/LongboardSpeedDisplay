@@ -21,12 +21,16 @@ def main():
         # camera.framerate = 90 # resolution => 720x480
         print(camera.resolution)
         logging.basicConfig(format='%(asctime)s - %(message)s',
-                            level=logging.INFO, filename='speed.log')
+                            level=logging.INFO, filename='speed.log', handlers=[
+                                logging.FileHandler('speed.log'),
+                                logging.StreamHandler()  # stream=sys.stdout
+                            ])
         device = initialize()
         device.display(light_up(1))  # show ready
         camera.capture('./image1.jpg')
         last_speeds = deque(maxlen=1000)
         counter = 0
+        new_color = 0
 
         # solution no. 1 takes about 0.4s
         # with array.PiRGBArray(camera) as output:
@@ -53,15 +57,20 @@ def main():
                 start = time()
                 counter += 1
                 image = frame.array
-                hue = extract_value(image[170][360])
-                color = define_color(hue)
-                if color == 6:
+                hue = extract_value(image[image.shape[0]][image.shape[1]])
+                # color = define_color(hue)
+                if new_color == 6:
                     continue
-                last_speeds.append((color, time() - start))
+                old_color = new_color
+                new_color = define_color(hue)
+                slices = calculate_speed(old_color, new_color)
+                # if color == 6:
+                #     continue
+                last_speeds.append((slices, time() - start))
                 logging.info(
-                    "Hue: {} - Color: {} - Speed: {} - Time: {} ".format(hue, color, speed, time() - start))
+                    "Hue: {} - Color: {} - Speed: {} - Time: {} ".format(hue, new_color, slices, time() - start))
                 print("Hue: {} - Color: {} - Speed: {} - Time: {} ".format(hue,
-                                                                           color, speed, time() - start))
+                                                                           new_color, slices, time() - start))
                 if counter != 1000:
                     continue
                 # measured in cm

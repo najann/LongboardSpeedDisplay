@@ -16,14 +16,17 @@ def initialize():
 
 
 def light_up(count):
-    img = Image.new('1', (_MX_SIZE, _MX_SIZE))
+
+    matrix = Image.new('1', (_MX_SIZE, _MX_SIZE))
     # augment number for better visualization
-    count = count * 3
-    full_rows = count // _MX_SIZE
+    points = 64 if count > 32 else count * 2
+    full_rows = points // _MX_SIZE
+
     for row in range(full_rows):
         for col in range(_MX_SIZE):
-            img.putpixel((col, row), 1)
-    remainder = int(count % _MX_SIZE)
+            matrix.putpixel((col, row), 1)
+
+    remainder = int(points % _MX_SIZE)
     for point in range(remainder):
-        img.putpixel((point, full_rows), 1)
-    return img
+        matrix.putpixel((point, full_rows), 1)
+    return matrix

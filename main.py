@@ -1,7 +1,5 @@
 import logging
 import numpy
-import os
-import sys
 from collections import deque
 from time import time
 
@@ -15,6 +13,7 @@ from get_color import define_color, extract_value
 _SLICE_LENGTH = 3.9
 _CONV_FAC = 0.036
 _ITERATIONS = 50
+
 
 def main(device):
     with PiCamera() as camera:
@@ -57,7 +56,8 @@ def main(device):
                 new_color = define_color(hue)
                 slices = calculate_speed(old_color, new_color)
                 last_speeds.append((slices, time() - start))
-                logging.info("Hue: {} - Slice: {} - Time: {} ".format(hue, slices, time() - start))
+                logging.info(
+                    "Hue: {} - Slice: {} - Time: {} ".format(hue, slices, time() - start))
 
                 if counter != _ITERATIONS:
                     continue
@@ -67,7 +67,8 @@ def main(device):
                 # measured in s
                 # total_time = sum(t for _, t in last_speeds)
                 km_per_h = distance/(time()-start) * _CONV_FAC
-                logging.info("Speed: {} - Distance: {} - Time: {} ".format(km_per_h, distance, time() - start))
+                logging.info(
+                    "Speed: {} - Distance: {} - Time: {} ".format(km_per_h, distance, time() - start))
                 image = light_up(int(km_per_h))
                 device.display(image)
                 counter = 0

@@ -1,8 +1,6 @@
 from PIL import Image
-from time import sleep
 
 from luma.core.interface.serial import noop, spi
-from luma.core.render import canvas
 from luma.led_matrix.device import max7219
 
 

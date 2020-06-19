@@ -9,10 +9,7 @@ def extract_value(pic):
             size = px.size
         pval = px[size[0] // 2, size[1] // 2]
     else:
-        pval = pic    # print(pval[0], pval[1], pval[2])
-    # print(f"HLS: {colorsys.rgb_to_hls(pval[0]/255, pval[1]/255, pval[2]/255)}")
-    # print(f"HSV: {colorsys.rgb_to_hsv(pval[0]/255, pval[1]/255, pval[2]/255)}")
-    # print(f"H: {int(colorsys.rgb_to_hsv(pval[0]/255, pval[1]/255, pval[2]/255)[0]*360)}")
+        pval = pic
     hsv = colorsys.rgb_to_hsv(pval[0] / 255, pval[1] / 255, pval[2] / 255)
     if hsv[1] <= 0.1 and hsv[2] >= 0.8:
         hue = "white"

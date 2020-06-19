@@ -5,7 +5,8 @@ import sys
 from collections import deque
 from time import time
 
-from picamera import PiCamera, array
+from picamera import PiCamera, array, PiCameraMMALError, PiCameraValueError
+from luma.core.legacy import show_message
 
 from calc_speed import calculate_speed
 from color_matrix import initialize, light_up
@@ -18,12 +19,12 @@ _ITERATIONS = 50
 
 def main(device):
     with PiCamera() as camera:
-        # camera.rotation = 180
-        # camera.brightness = 65
+        camera.rotation = 180
+        camera.brightness = 65
         camera.contrast = 10
-        camera.awb_mode = 'sunlight'
+        # camera.awb_mode = 'sunlight'
         logging.basicConfig(format='%(asctime)s - %(message)s',
-                            level=logging.INFO, filename='speed.log')
+                            level=logging.INFO, filename='/home/pi/longboard_speed/speed.log')
         device.display(light_up(1))  # show ready
         camera.capture('./image1.jpg')
         last_speeds = deque(maxlen=_ITERATIONS)
@@ -39,7 +40,7 @@ def main(device):
             for frame in camera.capture_continuous(output, format="bgr", use_video_port=True):
                 counter += 1
                 image = frame.array
-                y_pos = image.shape[0] // 4
+                y_pos = image.shape[0] // 3
                 x_pos = image.shape[1] // 2
                 extract = image[y_pos:y_pos+10, x_pos:x_pos+10]
 
@@ -51,12 +52,14 @@ def main(device):
 
                 if new_color == 6:
                     print("Interation Skipped")
+                    logging.info("Interation Skipped")
                     continue
 
                 old_color = new_color
                 new_color = define_color(hue)
                 slices = calculate_speed(old_color, new_color)
                 last_speeds.append((slices, time() - start))
+                print("Hue: {} - Slice: {} - Time: {} ".format(hue, slices, time() - start))
                 logging.info("Hue: {} - Slice: {} - Time: {} ".format(hue, slices, time() - start))
 
                 if counter != _ITERATIONS:
@@ -79,5 +82,9 @@ if __name__ == "__main__":
     try:
         device = initialize()
         main(device)
-    except KeyboardInterrupt:
+    except (KeyboardInterrupt, PiCameraValueError):
+        show_message(device, "Program stopped", fill="white")
+    except PiCameraMMALError:
+        show_message(device, "Camera already in use", fill="white")
+    finally:
         device.clear()
